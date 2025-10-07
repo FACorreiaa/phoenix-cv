@@ -1,4 +1,4 @@
-.PHONY: help push deploy push-deploy setup
+.PHONY: help push deploy push-deploy setup logs
 
 # Default target
 help:
@@ -71,3 +71,6 @@ audit:
 # Full CI pipeline
 ci: format test
 	@echo "✅ CI checks passed!"
+
+logs:
+	flyctl logs -a phoenix-cv

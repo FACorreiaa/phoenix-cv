@@ -446,6 +446,11 @@ defmodule PhoenixCsvWeb.AboutLive do
                 GitHub
               </a>
             </div>
+            <!-- Contact Page Link -->
+            <div class="divider">OR</div>
+            <.link navigate="/contact" class="btn btn-secondary mt-4">
+              Send Me a Message
+            </.link>
           </div>
         </div>
       </div>

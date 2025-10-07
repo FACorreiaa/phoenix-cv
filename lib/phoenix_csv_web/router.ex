@@ -20,6 +20,8 @@ defmodule PhoenixCsvWeb.Router do
     live "/", CvLive
     live "/about", AboutLive
     live "/projects", ProjectsLive
+    live "/chat", ChatLive
+    live "/contact", ContactLive
   end
 
   # Other scopes may use custom stacks.

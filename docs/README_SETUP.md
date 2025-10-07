@@ -163,3 +163,41 @@ If migrations fail on Fly.io:
 - Fly.io Deployment: https://fly.io/docs/elixir/
 - Geolix: https://hexdocs.pm/geolix/
 - DaisyUI: https://daisyui.com/
+
+# Todo
+
+1. New "Recommendations" page - Where colleagues/managers can leave testimonials
+    - Name, role, company
+    - Relationship (worked together, managed you, etc.)
+    - Testimonial text
+    - Optional: LinkedIn profile link
+    - Moderation system - you approve before they appear
+  2. Add a simple contact form to the About page
+    - Name, email, message
+    - Sends you an email via Swoosh
+    - Professional and low-maintenance
+  3. Later: Add live chat if needed
+    - Once you see traffic and get requests for real-time communication
+    - Can use a simple library like phoenix_live_view for basic chat
+    - Or integrate Intercom/Crisp (external services)
+
+  Why This Order?
+
+  1. Testimonials are powerful - Recruiters LOVE seeing what others say about you
+  2. Low maintenance - You control what appears (moderation)
+  3. Social proof - Shows you're credible and respected
+  4. Professional - Expected on a portfolio/CV site
+
+  Implementation Plan
+
+  Would you like me to build:
+
+  Phase 1 (Now):
+  - Recommendations/Testimonials page with moderation
+  - Simple contact form on About page
+
+  Phase 2 (Later, if needed):
+  - Live chat feature
+
+  What do you think? Should I proceed with the Testimonials + Contact Form approach?
+  

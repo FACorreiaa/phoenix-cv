@@ -55,3 +55,4 @@ phoenix_csv_test.db*
 # Environment files
 .env
 .env.*
+docs
