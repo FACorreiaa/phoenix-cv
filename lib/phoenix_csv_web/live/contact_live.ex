@@ -20,18 +20,29 @@ defmodule PhoenixCsvWeb.ContactLive do
   def handle_event("submit_contact", params, socket) do
     %{"name" => name, "email" => email, "message" => message} = params
 
-    # Send email
-    try do
-      PhoenixCsv.Emails.ContactEmail.contact_message(name, email, message)
-      |> PhoenixCsv.Mailer.deliver()
+    # Send email using Resend directly
+    client = Resend.client(api_key: System.get_env("RESEND_API_KEY"))
 
-      {:noreply,
-       socket
-       |> put_flash(:info, "Thank you for reaching out! I'll get back to you soon.")
-       |> assign(:contact_form, to_form(%{"name" => "", "email" => "", "message" => ""}))}
-    rescue
-      e ->
-        IO.inspect(e, label: "Email sending error")
+    case Resend.Emails.send(client, %{
+           from: "Portfolio <noreply@phoenix-cv.fly.dev>",
+           to: ["fernandocorreia316@gmail.com"],
+           reply_to: email,
+           subject: "New Contact Form Message from #{name}",
+           html: """
+           <h2>New Contact Form Submission</h2>
+           <p><strong>From:</strong> #{name} (#{email})</p>
+           <p><strong>Message:</strong></p>
+           <p>#{String.replace(message, "\n", "<br>")}</p>
+           """
+         }) do
+      {:ok, _} ->
+        {:noreply,
+         socket
+         |> put_flash(:info, "Thank you for reaching out! I'll get back to you soon.")
+         |> assign(:contact_form, to_form(%{"name" => "", "email" => "", "message" => ""}))}
+
+      {:error, reason} ->
+        IO.inspect(reason, label: "Email sending error")
 
         {:noreply,
          socket

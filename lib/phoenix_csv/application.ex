@@ -12,8 +12,6 @@ defmodule PhoenixCsv.Application do
       PhoenixCsv.Repo,
       {DNSCluster, query: Application.get_env(:phoenix_csv, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: PhoenixCsv.PubSub},
-      # Finch HTTP client for Swoosh
-      {Finch, name: PhoenixCsv.Finch},
       # Start a worker by calling: PhoenixCsv.Worker.start_link(arg)
       # {PhoenixCsv.Worker, arg},
       # Start to serve requests, typically the last entry

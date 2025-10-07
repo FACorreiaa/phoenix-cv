@@ -11,11 +11,7 @@ config :phoenix_csv, :ecto_adapter, Ecto.Adapters.Postgres
 config :phoenix_csv, PhoenixCsvWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
-# Configures Swoosh API Client
-config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: PhoenixCsv.Finch
-
-# Disable Swoosh Local Memory Storage
-config :swoosh, local: false
+# Email is handled via Resend API directly - no Swoosh needed
 
 # Do not print debug messages in production
 config :logger, level: :info

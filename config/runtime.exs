@@ -65,23 +65,8 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
-  # Configure email delivery for production
-  # Using Resend (https://resend.com) - Free tier: 100 emails/day
-  # You can also use Mailgun, SendGrid, or SMTP
-  config :phoenix_csv, PhoenixCsv.Mailer,
-    adapter: Swoosh.Adapters.Resend,
-    api_key: System.get_env("RESEND_API_KEY")
-
-  # If you prefer SMTP (e.g., Gmail):
-  # config :phoenix_csv, PhoenixCsv.Mailer,
-  #   adapter: Swoosh.Adapters.SMTP,
-  #   relay: "smtp.gmail.com",
-  #   username: System.get_env("SMTP_USERNAME"),
-  #   password: System.get_env("SMTP_PASSWORD"),
-  #   ssl: true,
-  #   tls: :always,
-  #   auth: :always,
-  #   port: 465
+  # Email delivery uses Resend API directly
+  # No additional config needed - API key is read from env var in the LiveView
 
   # ## SSL Support
   #

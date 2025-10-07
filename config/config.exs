@@ -22,14 +22,8 @@ config :phoenix_csv, PhoenixCsvWeb.Endpoint,
   pubsub_server: PhoenixCsv.PubSub,
   live_view: [signing_salt: "sUVlvhXK"]
 
-# Configures the mailer
-#
-# By default it uses the "Local" adapter which stores the emails
-# locally. You can see the emails in your browser, at "/dev/mailbox".
-#
-# For production it's recommended to configure a different adapter
-# at the `config/runtime.exs`.
-config :phoenix_csv, PhoenixCsv.Mailer, adapter: Swoosh.Adapters.Local
+# Email sending is done via Resend API directly in production
+# No Swoosh mailer needed for this simple use case
 
 # Configure esbuild (the version is required)
 config :esbuild,
