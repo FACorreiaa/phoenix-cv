@@ -8,6 +8,7 @@
 import Config
 
 config :phoenix_csv,
+  ecto_repos: [PhoenixCsv.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
@@ -58,6 +59,19 @@ config :logger, :default_formatter,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+# Configure Geolix for IP geolocation
+# To use this feature, download the free GeoLite2 Country database from MaxMind:
+# https://dev.maxmind.com/geoip/geolite2-free-geolocation-data
+# Place the .mmdb file in priv/geolix/GeoLite2-Country.mmdb
+config :geolix,
+  databases: [
+    %{
+      id: :country,
+      adapter: Geolix.Adapter.MMDB2,
+      source: Path.expand("../priv/geolix/GeoLite2-Country.mmdb", __DIR__)
+    }
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

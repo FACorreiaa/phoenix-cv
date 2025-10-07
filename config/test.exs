@@ -1,5 +1,13 @@
 import Config
 
+# Configure database for test (SQLite)
+config :phoenix_csv, PhoenixCsv.Repo,
+  database: Path.expand("../phoenix_csv_test.db", __DIR__),
+  pool: Ecto.Adapters.SQL.Sandbox,
+  pool_size: 10
+
+config :phoenix_csv, :ecto_adapter, Ecto.Adapters.SQLite3
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :phoenix_csv, PhoenixCsvWeb.Endpoint,

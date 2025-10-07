@@ -21,7 +21,7 @@ defmodule PhoenixCsv.MixProject do
   def application do
     [
       mod: {PhoenixCsv.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :os_mon]
     ]
   end
 
@@ -62,7 +62,14 @@ defmodule PhoenixCsv.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      # Database
+      {:ecto_sql, "~> 3.12"},
+      {:ecto_sqlite3, "~> 0.18", only: [:dev, :test]},
+      {:postgrex, ">= 0.0.0", only: :prod},
+      # IP Geolocation
+      {:geolix, "~> 2.0"},
+      {:geolix_adapter_mmdb2, "~> 0.6.0"}
     ]
   end
 
@@ -74,7 +81,10 @@ defmodule PhoenixCsv.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind phoenix_csv", "esbuild phoenix_csv"],
       "assets.deploy": [

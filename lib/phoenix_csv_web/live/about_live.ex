@@ -1,10 +1,27 @@
 defmodule PhoenixCsvWeb.AboutLive do
   use PhoenixCsvWeb, :live_view
+  alias PhoenixCsv.Analytics
+  alias PhoenixCsv.GeoIP
 
   def mount(_params, _session, socket) do
+    # Track visitor
+    if connected?(socket) do
+      ip_address = GeoIP.get_client_ip(socket)
+      geo_data = GeoIP.lookup(ip_address)
+      Analytics.track_visitor(ip_address, geo_data)
+    end
+
+    # Load analytics data
+    analytics = %{
+      total_visitors: Analytics.get_total_visitors(),
+      total_visits: Analytics.get_total_visits(),
+      visitors_by_country: Analytics.get_visitors_by_country()
+    }
+
     socket =
       socket
       |> assign(:page_title, "About Me - Fernando Correia")
+      |> assign(:analytics, analytics)
       |> Phoenix.Component.assign_new(:inner_content, fn -> nil end)
 
     {:ok, socket, layout: {PhoenixCsvWeb.Layouts, :app}}
@@ -21,6 +38,130 @@ defmodule PhoenixCsvWeb.AboutLive do
               <h1 class="text-4xl md:text-5xl font-bold mb-4">About Me</h1>
               <p class="text-xl md:text-2xl opacity-80">Get to know the person behind the code</p>
             </div>
+          </div>
+        </div>
+        <!-- Visitor Analytics -->
+        <div class="card bg-base-200 shadow-xl mb-8">
+          <div class="card-body">
+            <h2 class="card-title text-3xl mb-6">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+              Visitor Analytics
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div class="stat bg-base-100 rounded-box shadow-md">
+                <div class="stat-figure text-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-12 w-12"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                    />
+                  </svg>
+                </div>
+                <div class="stat-title">Unique Visitors</div>
+                <div class="stat-value text-primary"><%= @analytics.total_visitors %></div>
+                <div class="stat-desc">From around the world</div>
+              </div>
+
+              <div class="stat bg-base-100 rounded-box shadow-md">
+                <div class="stat-figure text-secondary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-12 w-12"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                </div>
+                <div class="stat-title">Total Views</div>
+                <div class="stat-value text-secondary"><%= @analytics.total_visits %></div>
+                <div class="stat-desc">Page visits</div>
+              </div>
+            </div>
+
+            <%= if length(@analytics.visitors_by_country) > 0 do %>
+              <div class="mt-4">
+                <h3 class="text-xl font-semibold mb-4">Visitors by Country</h3>
+                <div class="overflow-x-auto">
+                  <table class="table table-zebra">
+                    <thead>
+                      <tr>
+                        <th>Country</th>
+                        <th>Unique Visitors</th>
+                        <th>Total Visits</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <%= for country <- @analytics.visitors_by_country do %>
+                        <tr>
+                          <td>
+                            <div class="flex items-center gap-2">
+                              <span class="font-semibold"><%= country.country_code %></span>
+                              <span><%= country.country_name || "Unknown" %></span>
+                            </div>
+                          </td>
+                          <td><%= country.visitor_count %></td>
+                          <td>
+                            <div class="badge badge-primary"><%= country.total_visits %></div>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            <% else %>
+              <div class="alert alert-info">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  class="stroke-current shrink-0 w-6 h-6"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span>Be the first visitor! Analytics data will appear here soon.</span>
+              </div>
+            <% end %>
           </div>
         </div>
         <!-- Personal Introduction -->

@@ -9,6 +9,7 @@ defmodule PhoenixCsv.Application do
   def start(_type, _args) do
     children = [
       PhoenixCsvWeb.Telemetry,
+      PhoenixCsv.Repo,
       {DNSCluster, query: Application.get_env(:phoenix_csv, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: PhoenixCsv.PubSub},
       # Start a worker by calling: PhoenixCsv.Worker.start_link(arg)
