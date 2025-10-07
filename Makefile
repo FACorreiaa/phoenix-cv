@@ -22,7 +22,7 @@ push:
 
 # Deploy to Fly.io
 deploy:
-	@echo "🚀 Deploying to Fly.io..."
+	@echo "🚀 Deploying to Fly.io...."
 	flyctl deploy
 	@echo "✅ Successfully deployed to Fly.io!"
 
