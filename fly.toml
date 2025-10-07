@@ -3,7 +3,7 @@
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'phoenix-csv'
+app = 'phoenix-cv'
 primary_region = 'cdg'
 kill_signal = 'SIGTERM'
 
@@ -13,7 +13,7 @@ kill_signal = 'SIGTERM'
   release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = 'phoenix-csv.fly.dev'
+  PHX_HOST = 'phoenix-cv.fly.dev'
   PORT = '8080'
 
 [http_service]
