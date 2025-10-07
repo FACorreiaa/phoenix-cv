@@ -44,3 +44,14 @@ erl_crash.dump
 /assets/node_modules/
 /priv/static/assets/
 /priv/static/cache_manifest.json
+
+# SQLite database files (dev/test only)
+*.db
+*.db-shm
+*.db-wal
+phoenix_csv_dev.db*
+phoenix_csv_test.db*
+
+# Environment files
+.env
+.env.*

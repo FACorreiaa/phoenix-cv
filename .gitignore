@@ -35,3 +35,10 @@ phoenix_csv-*.tar
 npm-debug.log
 /assets/node_modules/
 .env
+
+# SQLite database files (dev/test only)
+*.db
+*.db-shm
+*.db-wal
+phoenix_csv_dev.db*
+phoenix_csv_test.db*
